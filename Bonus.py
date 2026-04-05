@@ -42,6 +42,8 @@ for _ in range(samples):
     if r > 100 and g < 100 and b < 100:
         red_hits += 1
 
+# compute estimated area by scaling the red pixel ratio to the known total
+
 ratio = red_hits / samples
 mined = ratio * total_area
 

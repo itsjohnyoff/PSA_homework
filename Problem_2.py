@@ -3,26 +3,30 @@ import random
 # note: quick clarification added; logic unchanged
 
 def sim(slots, bullets, spin, trials=100000):
-    # simulate the probability of dying after hearing a click
+    # simulate the conditional probability of dying given the first pull was a click
+    # `slots` is the cylinder size, `bullets` lists indexes with bullets,
+    # `spin` boolean indicates whether the cylinder is spun again before the
+    # second pull, and `trials` controls Monte Carlo samples.
     deaths = 0
     valid = 0
 
     for _ in range(trials):
-        # randomly pick a starting cylinder position
+        # randomly pick a starting cylinder position (0..slots-1)
         start = random.randint(0, slots - 1)
 
-        # if the starting position has a bullet, you wouldn't have heard a click
+        # if there was a bullet at the starting position, you'd have heard a bang
+        # so skip those trials — we only want cases where the first pull clicked
         if start in bullets:
             continue
-            
-        # we heard a click, so this is a valid scenario to consider
+
+        # this trial matches the observed "click" condition
         valid += 1
 
         if spin:
-            # player chooses to spin the cylinder before pulling the trigger again
+            # if the player spins, the next slot is uniformly random again
             next_slot = random.randint(0, slots - 1)
         else:
-            # player pulls the trigger again without spinning (moves to the next slot)
+            # without spinning, the cylinder advances one position deterministically
             next_slot = (start + 1) % slots
 
         # check if the next trigger pull results in firing a bullet

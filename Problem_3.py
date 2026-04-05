@@ -9,27 +9,33 @@ def play_game(verbose=False):
     bankroll = 1000
     table_limit = 500
     
+    # continue until the sequence list is exhausted (target reached)
     while len(seq) > 0:
         spins += 1
         
+        # bet is sum of first and last entry in the list (Labouchere rule)
         if len(seq) == 1:
             bet = seq[0]
         else:
             bet = seq[0] + seq[-1]
 
+        # check for bankruptcy (not enough funds to place the required bet)
         if bet > (bankroll + profit):
-            if verbose: 
+            if verbose:
                 print(f"  bankrupt at spin {spins}. needed ${bet}, had ${bankroll + profit}")
             return profit, "bankrupt"
         
+        # check against table betting limit
         if bet > table_limit:
-            if verbose: 
+            if verbose:
                 print(f"  table limit hit at spin {spins}. needed ${bet}")
             return profit, "limit"
 
+        # roulette win probability on single number bets simplified to 18/37
         won = random.random() < (18 / 37)
-        
+
         if won:
+            # on a win, add profit and remove the two numbers used
             profit += bet
             seq.pop(0)
             if len(seq) > 0:
@@ -37,6 +43,7 @@ def play_game(verbose=False):
             if verbose:
                 print(f"  spin {spins}: won ${bet} | list: {seq}")
         else:
+            # on a loss, subtract bet and append it to the sequence
             profit -= bet
             seq.append(bet)
             if verbose:
