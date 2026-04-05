@@ -1,7 +1,7 @@
 import hashlib
 import os
 import time
-import sys
+
 
 
 def find_collision(bits=40):
