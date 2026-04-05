@@ -1,4 +1,5 @@
 import random
+# quick note: kept the original simulation logic, clarified wording
 
 def play_game():
     # flip until we get tails (50% chance), counting total flips

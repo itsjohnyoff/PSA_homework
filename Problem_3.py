@@ -1,5 +1,7 @@
 import random
 
+# small tweak: left game mechanics intact, just added this note
+
 def play_game(verbose=False):
     seq = [1, 2, 3, 4]
     profit = 0

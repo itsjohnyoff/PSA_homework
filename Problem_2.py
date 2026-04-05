@@ -1,5 +1,7 @@
 import random
 
+# note: quick clarification added; logic unchanged
+
 def sim(slots, bullets, spin, trials=100000):
     # simulate the probability of dying after hearing a click
     deaths = 0
