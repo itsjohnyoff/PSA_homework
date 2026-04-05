@@ -21,7 +21,7 @@ try:
         print("must be at least 1, using 100000")
         samples = 100000
     elif samples > 5000000:
-        print("whoa, that's too many! capping at 5,000,000 so we don't crash.")
+        print("that's too many! capping at 5,000,000 so we don't crash.")
         samples = 5000000
         
 except ValueError:
