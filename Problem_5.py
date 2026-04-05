@@ -3,7 +3,6 @@ import os
 import time
 import sys
 
-# note: kept approach simple for demo; feel free to tweak bits
 
 def find_collision(bits=40):
     hex_chars = bits // 4

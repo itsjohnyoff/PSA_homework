@@ -1,5 +1,4 @@
 import random
-# quick note: kept the original simulation logic, clarified wording
 
 def play_game():
     # flip until we get the first head (this models the geometric distribution)

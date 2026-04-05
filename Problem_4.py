@@ -1,7 +1,5 @@
 import random
 
-# quick note: retained implementation; added this brief comment
-
 def play_game(spins, verbose=False):
     profit = 0
     seq_profit = 0

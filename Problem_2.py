@@ -1,7 +1,5 @@
 import random
 
-# note: quick clarification added; logic unchanged
-
 def sim(slots, bullets, spin, trials=100000):
     # simulate the conditional probability of dying given the first pull was a click
     # `slots` is the cylinder size, `bullets` lists indexes with bullets,

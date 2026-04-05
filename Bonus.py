@@ -1,7 +1,6 @@
 import random
 from PIL import Image
 
-# small note: added a minor clarifying comment; behaviour unchanged
 
 print("--- map area estimator ---")
 filename = input("image name? : ")
