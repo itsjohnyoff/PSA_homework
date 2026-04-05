@@ -1,37 +1,30 @@
 import random
 
 def sim(slots, bullets, spin, trials=100000):
-    # simulate the conditional probability of dying given the first pull was a click
-    # `slots` is the cylinder size, `bullets` lists indexes with bullets,
-    # `spin` boolean indicates whether the cylinder is spun again before the
-    # second pull, and `trials` controls Monte Carlo samples.
+    # simulate chance of dying after hearing a click
+    # slots: cylinder size, bullets: bullet indexes, spin: whether to spin again
     deaths = 0
     valid = 0
 
     for _ in range(trials):
-        # randomly pick a starting cylinder position (0..slots-1)
+        # pick a random starting position; skip if it was a bullet (we heard a bang)
         start = random.randint(0, slots - 1)
-
-        # if there was a bullet at the starting position, you'd have heard a bang
-        # so skip those trials — we only want cases where the first pull clicked
         if start in bullets:
             continue
-
-        # this trial matches the observed "click" condition
         valid += 1
 
         if spin:
-            # if the player spins, the next slot is uniformly random again
+            # spinning: next slot is random
             next_slot = random.randint(0, slots - 1)
         else:
-            # without spinning, the cylinder advances one position deterministically
+            # no spin: next slot is the following chamber
             next_slot = (start + 1) % slots
 
         # check if the next trigger pull results in firing a bullet
         if next_slot in bullets:
             deaths += 1
 
-    # return the probability of dying given that the first pull was a click
+    # return estimated conditional probability
     return deaths / valid
 
 print("--- Russian Roulette Sim ---")

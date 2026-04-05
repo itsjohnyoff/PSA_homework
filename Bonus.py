@@ -35,13 +35,13 @@ red_hits = 0
 for _ in range(samples):
     x = random.randint(0, w - 1)
     y = random.randint(0, h - 1)
-    
+
     r, g, b = img.getpixel((x, y))
 
     if r > 100 and g < 100 and b < 100:
         red_hits += 1
 
-# compute estimated area by scaling the red pixel ratio to the known total
+# estimate area by scaling red ratio to total map area
 
 ratio = red_hits / samples
 mined = ratio * total_area

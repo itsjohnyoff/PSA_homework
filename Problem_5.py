@@ -13,16 +13,14 @@ def find_collision(bits=40):
     print(f"\nTarget: {bits} bits ({hex_chars} hex chars)")
     print("Hashing random inputs...\n")
 
-    # brute-force search for a partial MD5 collision using truncated hex prefix
+    # try random inputs and look for matching truncated MD5 prefixes
     while True:
-        # create a pseudo-random input string for hashing
         test_input = f"input_{attempts}_{os.urandom(4).hex()}"
 
         full_hash = hashlib.md5(test_input.encode('utf-8')).hexdigest()
         short_hash = full_hash[:hex_chars]
         attempts += 1
 
-        # collision detected when two different inputs share the same short hash
         if short_hash in seen:
             if seen[short_hash] != test_input:
                 end_time = time.time()
@@ -41,7 +39,6 @@ def find_collision(bits=40):
         else:
             seen[short_hash] = test_input
 
-        # periodic progress report for long runs
         if attempts % 500000 == 0:
             print(f" checked {attempts} hashes...")
 

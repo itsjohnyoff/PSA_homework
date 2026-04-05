@@ -1,18 +1,15 @@
 import random
 
 def play_game():
-    # flip until we get the first head (this models the geometric distribution)
-    # each call to random.random() < 0.5 represents a "tail" outcome
+    # keep flipping until a head shows up
     flips = 1
     while random.random() < 0.5:
         flips += 1
-
-    # payoff is 2^j where j is the toss number of the first head
-    # e.g., if head appears on the 3rd toss, payout = 8
+    # payout is 2^j (j = toss of first head)
     return 2 ** flips
 
 def simulate(n):
-    # run `n` independent games and compute the sample mean payout
+    # play `n` games and return the average payout
     total = 0
     for _ in range(n):
         total += play_game()

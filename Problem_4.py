@@ -1,6 +1,7 @@
 import random
 
 def play_game(spins, verbose=False):
+    # oscar's grind state
     profit = 0
     seq_profit = 0
     bet = 1
@@ -10,33 +11,32 @@ def play_game(spins, verbose=False):
     limit = 500
 
     for spin in range(1, spins + 1):
-        # check if current bet would bankrupt the player
+        # cannot cover bet -> bankrupt
         if bet > (bankroll + profit):
             if verbose:
                 print(f"  bankrupt at spin {spin}. needed ${bet}")
             return profit, max_bet, worst, "bankrupt"
 
-        # check against table betting limit
+        # table limit check
         if bet > limit:
             if verbose:
                 print(f"  table limit hit at spin {spin}. needed ${bet}")
             return profit, max_bet, worst, "limit"
 
-        # track the largest bet attempted
+        # update max bet seen
         if bet > max_bet:
             max_bet = bet
 
-        # win/loss resolution using simplified roulette win probability
+        # simulate a spin outcome
         won = random.random() < (18 / 37)
 
         if won:
-            # on win, increase profit and update sequence profit tracker
             profit += bet
             seq_profit += bet
             if verbose:
                 print(f"  spin {spin}: won ${bet} | seq: ${seq_profit} | total: ${profit}")
 
-            # adjust betting according to Oscar's Grind logic
+            # Oscar's Grind logic for next bet
             if seq_profit >= 1:
                 seq_profit = 0
                 bet = 1
@@ -47,13 +47,11 @@ def play_game(spins, verbose=False):
                 else:
                     bet = next_bet
         else:
-            # on loss, decrement profit and increase sequence deficit
             profit -= bet
             seq_profit -= bet
             if verbose:
                 print(f"  spin {spin}: lost ${bet} | seq: ${seq_profit} | total: ${profit}")
 
-        # record worst (deepest) bankroll drop
         if profit < worst:
             worst = profit
 
