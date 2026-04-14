@@ -1,5 +1,4 @@
 import random
-import sys
 
 def simulate_roulette(slots, bullet_positions, spin_after, trials=100_000):
     deaths = 0
@@ -46,7 +45,7 @@ def run_all():
         better = "DON'T SPIN" if p_no_spin < p_spin else "SPIN"
         print(f"{label}   {p_no_spin*100:>6.2f}%               {p_spin*100:>6.2f}%               {better}")
         
-    print("\nNote: Lower % means a better chance of survival.")
+    print("\nLower % means a better chance of survival.")
 
 def main():
     print("--- Russian Roulette Probability Simulator ---")
@@ -59,18 +58,13 @@ def main():
         choice = input("\nChoose option: ").strip().lower()
 
         if choice in ("q", "quit", "exit"):
-            sys.exit()
+            break
 
         elif choice == "1":
-            print("\nRunning simulations... please wait.")
             run_all()
 
         else:
             print("Invalid option. Please enter 1 or q.")
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\nExiting.")
-        sys.exit()
+    main()
