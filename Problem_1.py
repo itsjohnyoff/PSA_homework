@@ -36,7 +36,7 @@ def main():
         print("  [2] Simulate a specific number of games")
         print("  [q] Quit")
 
-        choice = input("\nPick one: ").strip().lower()
+        choice = input("\nChoose option: ").strip().lower()
 
         if choice in ("q", "quit", "exit"):
             break
