@@ -1,15 +1,5 @@
 # PSA Homework
 
-## Deadlines
-For all Groups: **April 17, 2026**
-
-## Grading System
-- 1 problem - 6
-- 2 problems - 7
-- 3 problems - 8
-- 4 problems - 9
-- 5 problems and bonus - 10
-
 ## Problem 1: How much should I bet?
 A fair coin is flipped until it lands on heads for the first time.
 If heads appears on the `j`-th toss, the payout is:
