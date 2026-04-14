@@ -14,7 +14,7 @@ You are guaranteed to win at least $2, but the practical question is:
 This is the classic **St. Petersburg paradox**, explored here by simulation.
 
 ## Simulation Approach
-The script in `1.py` simulates repeated games:
+The script in `Problem_1.py` simulates repeated games:
 - One game: flip a fair coin until first heads, then compute payout `2^j`.
 - Many games: run the game repeatedly and compute the average payout.
 - Sweep mode: test multiple sample sizes (`10` to `1,000,000`) to observe how the average changes.
@@ -23,7 +23,7 @@ The script in `1.py` simulates repeated games:
 Use Python 3:
 
 ```bash
-python 1.py
+python Problem_1.py
 ```
 
 Then choose:
