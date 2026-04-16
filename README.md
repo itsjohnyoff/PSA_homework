@@ -176,3 +176,47 @@ Then choose:
 
 ### Key Takeaway
 Even without breaking full MD5, truncated hashes collide quickly due to the birthday effect, illustrating why short hash prefixes are unsafe for uniqueness.
+
+## Bonus: Map Area Estimator (Monte Carlo)
+### Problem Statement
+Estimate the area of a red-highlighted region on a map image using random sampling (Monte Carlo darts).
+
+### Simulation Approach
+- Load an image file and read pixel colors.
+- Throw random sample points uniformly across the image.
+- Count a hit when a sampled pixel is red (`r > 100`, `g < 100`, `b < 100`).
+- Estimate region ratio as:
+  - red_hits / total_samples
+- Convert ratio to area using a known total map area (`42.0` square miles in the script).
+
+### Requirements
+- Python package: Pillow
+
+Install with:
+
+```bash
+pip install pillow
+```
+
+### How to Run
+Use Python 3:
+
+```bash
+python Bonus.py
+```
+
+Then provide:
+- image filename (for example, `map.png`)
+- number of random samples (darts)
+
+The script includes basic safety caps:
+- minimum samples reset to `100000` if invalid or non-positive
+- maximum samples capped at `5000000`
+
+### Output Includes
+- number of red hits
+- estimated red percentage
+- estimated mined area in square miles
+
+### Key Takeaway
+Monte Carlo estimation converges as sample size increases, but results still vary slightly run to run due to randomness.
