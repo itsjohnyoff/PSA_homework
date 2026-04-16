@@ -2,19 +2,16 @@ import random
 
 def simulate_roulette(slots, bullet_positions, spin_after, trials=100_000):
     deaths = 0
-    valid_games = 0  # CRITICAL FIX: We must track games where we survive the first click
+    valid_games = 0  
 
     for _ in range(trials):
         start = random.randint(0, slots - 1)
 
-        # First pull: If it's a bullet, ignore this timeline (you're dead)
         if start in bullet_positions:
             continue
         
-        # You survived the first click! This counts as a valid scenario.
         valid_games += 1
 
-        # Second pull
         if spin_after:
             next_slot = random.randint(0, slots - 1)
         else:
@@ -23,12 +20,10 @@ def simulate_roulette(slots, bullet_positions, spin_after, trials=100_000):
         if next_slot in bullet_positions:
             deaths += 1
 
-    # The true probability is deaths divided by VALID games, not total trials
     return deaths / valid_games
 
 def run_all():
     configs = [
-        # (slots, bullets set, label)
         (6, {0, 1}, "6 slots, adjacent    "),
         (6, {0, 2}, "6 slots, not adjacent"),
         (5, {0, 1}, "5 slots, adjacent    "),

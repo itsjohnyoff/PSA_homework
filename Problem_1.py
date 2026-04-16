@@ -60,10 +60,11 @@ def main():
                 print("Error: Number too large (limit: 10,000,000).")
                 continue
 
-            print(f"Running {n:,} games...")
+            print(f"Running {n:,} games...\n")
             avg = simulate(n)
+            print("Results:")
             print(f"  Total games:    {n:,}")
-            print(f"  Avg payout:     ${avg:,.2f}")
+            print(f"  Avg payout:     ${avg:,.2f}\n")
 
         else:
             print("Invalid option. Please enter 1, 2, or q.")
