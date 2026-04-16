@@ -1,129 +1,109 @@
 import random
-import sys
 
-def play_labouchere(verbose=False, bankroll=1000, table_limit=500):
-    """Simulates a single full run of the Labouchere system."""
-    sequence = [1, 2, 3, 4]
+def play_game(verbose=False):
+    seq = [1, 2, 3, 4]
     profit = 0
     spins = 0
+    bankroll = 1000
+    table_limit = 500
     
-    while len(sequence) > 0:
+    while len(seq) > 0:
         spins += 1
         
-        # 1. Determine the bet
-        if len(sequence) == 1:
-            bet = sequence[0]
+        if len(seq) == 1:
+            bet = seq[0]
         else:
-            bet = sequence[0] + sequence[-1]
+            bet = seq[0] + seq[-1]
             
-        # 2. Check Reality Limits (Why it's not foolproof)
+        # check if we hit reality limits
         if bet > (bankroll + profit):
             if verbose: 
-                print(f"  [!] BANKRUPT at spin {spins}. Needed to bet ${bet}, but only had ${bankroll + profit} left.")
-            return profit
+                print(f"  bankrupt at spin {spins}. needed ${bet}, had ${bankroll + profit}")
+            return profit, "bankrupt"
         
         if bet > table_limit:
             if verbose: 
-                print(f"  [!] TABLE LIMIT REACHED at spin {spins}. Needed to bet ${bet}, but limit is ${table_limit}.")
-            return profit
+                print(f"  table limit hit at spin {spins}. needed ${bet}")
+            return profit, "limit"
 
-        # 3. Spin the Roulette Wheel (18 Red, 18 Black, 1 Green zero)
-        # Probability of winning a Red bet is 18/37
+        # 18/37 chance to win on european roulette
         won = random.random() < (18 / 37)
         
         if won:
             profit += bet
-            sequence.pop(0)
-            if len(sequence) > 0:
-                sequence.pop(-1)
+            seq.pop(0)
+            if len(seq) > 0:
+                seq.pop(-1)
             if verbose:
-                print(f"  Spin {spins}: WON ${bet}. List is now: {sequence}")
+                print(f"  spin {spins}: won ${bet} | list: {seq}")
         else:
             profit -= bet
-            sequence.append(bet)
+            seq.append(bet)
             if verbose:
-                print(f"  Spin {spins}: LOST ${bet}. List is now: {sequence}")
+                print(f"  spin {spins}: lost ${bet} | list: {seq}")
                 
     if verbose:
-        print(f"  Success! List cleared in {spins} spins. Final Profit: ${profit}")
+        print(f"  success! cleared in {spins} spins. profit: ${profit}")
         
-    return profit
+    return profit, "won"
 
-def run_mass_simulation(n):
-    """Runs the simulation thousands of times to see the true win rate and total profit."""
-    wins = 0
-    losses = 0
-    total_profit = 0
-    worst_loss = 0
+print("--- Labouchere Simulator ---")
+print("Target: $10 | Bankroll: $1000 | Limit: $500")
+
+while True:
+    print("\n1. Watch one game")
+    print("2. Simulate many games")
+    print("q. Quit")
     
-    for _ in range(n):
-        result = play_labouchere(verbose=False)
-        total_profit += result  # Accumulate the net total of every game played
+    choice = input("pick: ").strip().lower()
+
+    if choice in ('q', 'quit', 'exit'):
+        break
         
-        if result == 10:
-            wins += 1
-        else:
-            losses += 1
-            # Track the most devastating single loss
-            if result < worst_loss:
-                worst_loss = result
-
-    win_rate = (wins / n) * 100
-    print(f"\n--- Results after {n:,} attempts ---")
-    print(f"Times you successfully won $10:  {wins:,} ({win_rate:.2f}%)")
-    print(f"Times the system FAILED you:     {losses:,}")
-    
-    if losses > 0:
-        print(f"Worst single loss:               ${worst_loss:,.2f}")
+    elif choice == '1':
+        print()
+        play_game(verbose=True)
         
-    print("-" * 40)
-    print(f"OVERALL NET PROFIT:              ${total_profit:,.2f}")
-    print("-" * 40)
-
-def main():
-    print("--- Labouchere Roulette Simulator ---")
-    print("Initial List: [1, 2, 3, 4] (Target Profit: $10)")
-    print("Assumptions: $1000 Bankroll, $500 Table Limit, European Roulette")
-    
-    while True:
-        print("\nOptions:")
-        print("  [1] Watch a single game play out step-by-step")
-        print("  [2] Simulate a massive number of games")
-        print("  [q] Quit")
-        
-        choice = input("\nChoose option: ").strip().lower()
-
-        if choice in ("q", "quit", "exit"):
-            sys.exit()
-
-        elif choice == "1":
-            print("\nStarting a single game...\n")
-            play_labouchere(verbose=True)
-
-        elif choice == "2":
-            raw = input("How many games to simulate? ").strip()
-            try:
-                n = int(raw)
-            except ValueError:
-                print("Error: Please enter a valid number.")
-                continue
-
-            if n <= 0:
-                print("Error: Number must be at least 1.")
-                continue
-            if n > 1_000_000:
-                print("Error: Let's keep it under 1,000,000 to save time.")
+    elif choice == '2':
+        try:
+            n = int(input("how many games? "))
+            if n <= 0 or n > 1000000:
+                print("keep it between 1 and 1,000,000")
                 continue
                 
-            print(f"\nRunning {n:,} games... please wait.")
-            run_mass_simulation(n)
+            wins = 0
+            bankrupts = 0
+            limits = 0
+            total_profit = 0
+            worst = 0
+            
+            print(f"\nrunning {n} games...")
+            for _ in range(n):
+                res, status = play_game()
+                total_profit += res
+                
+                if status == "won":
+                    wins += 1
+                elif status == "bankrupt":
+                    bankrupts += 1
+                    if res < worst: worst = res
+                elif status == "limit":
+                    limits += 1
+                    if res < worst: worst = res
 
-        else:
-            print("Invalid option. Please enter 1, 2, or q.")
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print("\nExiting.")
-        sys.exit()
+            win_rate = (wins / n) * 100
+            print(f"\n--- results for {n} games ---")
+            print(f"won $10:          {wins} times ({win_rate:.1f}%)")
+            print(f"bankrupted:       {bankrupts} times")
+            print(f"hit table limit:  {limits} times")
+            if (bankrupts + limits) > 0:
+                print(f"worst loss:       ${worst}")
+            print("-" * 30)
+            print(f"total net profit: ${total_profit}")
+            print("-" * 30)
+            
+        except ValueError:
+            print("invalid number")
+            
+    else:
+        print("bad input")

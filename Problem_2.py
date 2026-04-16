@@ -1,65 +1,56 @@
 import random
 
-def simulate_roulette(slots, bullet_positions, spin_after, trials=100_000):
+def sim(slots, bullets, spin, trials=100000):
     deaths = 0
-    valid_games = 0  
+    valid = 0
 
     for _ in range(trials):
         start = random.randint(0, slots - 1)
-
-        if start in bullet_positions:
-            continue
         
-        valid_games += 1
+        # skip if we died on the first click
+        if start in bullets:
+            continue
+            
+        valid += 1
 
-        if spin_after:
+        if spin:
             next_slot = random.randint(0, slots - 1)
         else:
             next_slot = (start + 1) % slots
 
-        if next_slot in bullet_positions:
+        if next_slot in bullets:
             deaths += 1
 
-    return deaths / valid_games
+    return deaths / valid
 
-def run_all():
-    configs = [
-        (6, {0, 1}, "6 slots, adjacent    "),
-        (6, {0, 2}, "6 slots, not adjacent"),
-        (5, {0, 1}, "5 slots, adjacent    "),
-        (5, {0, 2}, "5 slots, not adjacent"),
-    ]
+print("--- Russian Roulette Sim ---")
 
-    print(f"\n{'Scenario':<26}  {'No Spin (Die %)':<18} {'Spin (Die %)':<18}  Best Choice")
-    print("-" * 75)
-
-    for slots, bullets, label in configs:
-        p_no_spin = simulate_roulette(slots, bullets, spin_after=False)
-        p_spin    = simulate_roulette(slots, bullets, spin_after=True)
-
-        better = "DON'T SPIN" if p_no_spin < p_spin else "SPIN"
-        print(f"{label}   {p_no_spin*100:>6.2f}%               {p_spin*100:>6.2f}%               {better}")
-        
-    print("\nLower % means a better chance of survival.")
-
-def main():
-    print("--- Russian Roulette Probability Simulator ---")
+while True:
+    print("\n1. Run all scenarios")
+    print("q. Quit")
     
-    while True:
-        print("\nOptions:")
-        print("  [1] Run the simulation for all 8 scenarios")
-        print("  [q] Quit")
+    choice = input("pick: ").strip().lower()
+
+    if choice in ('q', 'quit', 'exit'):
+        break
         
-        choice = input("\nChoose option: ").strip().lower()
-
-        if choice in ("q", "quit", "exit"):
-            break
-
-        elif choice == "1":
-            run_all()
-
-        else:
-            print("Invalid option. Please enter 1 or q.")
-
-if __name__ == "__main__":
-    main()
+    elif choice == '1':
+        configs = [
+            (6, [0, 1], "6 slots adj    "),
+            (6, [0, 2], "6 slots not adj"),
+            (5, [0, 1], "5 slots adj    "),
+            (5, [0, 2], "5 slots not adj"),
+        ]
+        
+        print("\nscenario        | no spin | spin  | best choice")
+        print("-" * 50)
+        
+        for slots, bullets, label in configs:
+            p_no = sim(slots, bullets, False)
+            p_spin = sim(slots, bullets, True)
+            
+            better = "dont spin" if p_no < p_spin else "spin"
+            print(f"{label} | {p_no*100:.1f}%   | {p_spin*100:.1f}% | {better}")
+            
+    else:
+        print("bad input")
