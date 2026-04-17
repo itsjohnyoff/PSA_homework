@@ -13,7 +13,6 @@ def find_collision(bits=40):
     print("Hashing random inputs...\n")
 
     while True:
-        # mix counter with random bytes for unique inputs
         test_input = f"input_{attempts}_{os.urandom(4).hex()}"
         
         full_hash = hashlib.md5(test_input.encode('utf-8')).hexdigest()

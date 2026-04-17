@@ -15,8 +15,7 @@ total_area = 42.0
 
 try:
     samples = int(input("how many random darts? "))
-    
-    # Verificăm limitele (The "Idiot-Proof" Cap)
+
     if samples <= 0:
         print("must be at least 1, using 100000")
         samples = 100000
@@ -37,8 +36,7 @@ for _ in range(samples):
     y = random.randint(0, h - 1)
     
     r, g, b = img.getpixel((x, y))
-    
-    # counting the red pixels
+
     if r > 100 and g < 100 and b < 100:
         red_hits += 1
 

@@ -10,7 +10,6 @@ def play_game(spins, verbose=False):
     limit = 500
 
     for spin in range(1, spins + 1):
-        # check limits
         if bet > (bankroll + profit):
             if verbose: 
                 print(f"  bankrupt at spin {spin}. needed ${bet}")
@@ -24,7 +23,6 @@ def play_game(spins, verbose=False):
         if bet > max_bet:
             max_bet = bet
 
-        # 18/37 chance to win on black
         won = random.random() < (18 / 37)
 
         if won:

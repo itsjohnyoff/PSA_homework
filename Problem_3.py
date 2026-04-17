@@ -14,8 +14,7 @@ def play_game(verbose=False):
             bet = seq[0]
         else:
             bet = seq[0] + seq[-1]
-            
-        # check if we hit reality limits
+
         if bet > (bankroll + profit):
             if verbose: 
                 print(f"  bankrupt at spin {spins}. needed ${bet}, had ${bankroll + profit}")
@@ -26,7 +25,6 @@ def play_game(verbose=False):
                 print(f"  table limit hit at spin {spins}. needed ${bet}")
             return profit, "limit"
 
-        # 18/37 chance to win on european roulette
         won = random.random() < (18 / 37)
         
         if won:

@@ -6,8 +6,7 @@ def sim(slots, bullets, spin, trials=100000):
 
     for _ in range(trials):
         start = random.randint(0, slots - 1)
-        
-        # skip if we died on the first click
+
         if start in bullets:
             continue
             
