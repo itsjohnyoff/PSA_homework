@@ -1,29 +1,38 @@
 import random
 
 def sim(slots, bullets, spin, trials=100000):
+    # simulate the probability of dying after hearing a click
     deaths = 0
     valid = 0
 
     for _ in range(trials):
+        # randomly pick a starting cylinder position
         start = random.randint(0, slots - 1)
 
+        # if the starting position has a bullet, you wouldn't have heard a click
         if start in bullets:
             continue
             
+        # we heard a click, so this is a valid scenario to consider
         valid += 1
 
         if spin:
+            # player chooses to spin the cylinder before pulling the trigger again
             next_slot = random.randint(0, slots - 1)
         else:
+            # player pulls the trigger again without spinning (moves to the next slot)
             next_slot = (start + 1) % slots
 
+        # check if the next trigger pull results in firing a bullet
         if next_slot in bullets:
             deaths += 1
 
+    # return the probability of dying given that the first pull was a click
     return deaths / valid
 
 print("--- Russian Roulette Sim ---")
 
+# main menu loop
 while True:
     print("\n1. Run all scenarios")
     print("q. Quit")
@@ -34,6 +43,7 @@ while True:
         break
         
     elif choice == '1':
+        # define different gun configurations: (total slots, bullet positions, display label)
         configs = [
             (6, [0, 1], "6 slots adj    "),
             (6, [0, 2], "6 slots not adj"),
@@ -45,9 +55,11 @@ while True:
         print("-" * 50)
         
         for slots, bullets, label in configs:
+            # calculate death probabilities for both choices
             p_no = sim(slots, bullets, False)
             p_spin = sim(slots, bullets, True)
             
+            # determine the safest strategy
             better = "dont spin" if p_no < p_spin else "spin"
             print(f"{label} | {p_no*100:.1f}%   | {p_spin*100:.1f}% | {better}")
             
